@@ -1,55 +1,79 @@
-# Mintlify Starter Kit
+# Weekly Golf Mover Game
 
-Use the starter kit to get your docs deployed and ready to customize.
+This repository now includes a production-ready frontend for your weekly golf game backend.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## First-time setup note
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+Please customize `AGENTS.md` for your project-specific terminology, style rules, and documentation boundaries.
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+## Project structure
 
-## AI-assisted writing
+- `frontend/`: Next.js + TypeScript + Tailwind app for leaderboard display.
+- Backend scripts and services (already implemented): ESPN ingest, scoring, webhook, and history persistence.
 
-Set up your AI coding tool to work with Mintlify:
+## Backend usage
+
+Run these commands from your backend root (where your Python files live).
+
+### Run webhook API
 
 ```bash
-npx skills add https://mintlify.com/docs
+python webhook.py
 ```
 
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
+This should expose:
 
-See the [AI tools guides](/ai-tools) for tool-specific setup.
+- `GET /results` for frontend consumption.
 
-## Development
+### Run weekly scoring workflow
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
-npm i -g mint
+```bash
+python run_week.py
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+This updates weekly outputs, including `data/latest_results.json`.
 
+## Frontend usage
+
+Run these commands from `frontend/`.
+
+### Install
+
+```bash
+npm install
 ```
-mint dev
+
+### Local development
+
+```bash
+npm run dev
 ```
 
-View your local preview at `http://localhost:3000`.
+Open `http://localhost:3000`.
 
-## Publishing changes
+By default, the app fetches results from:
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+- `http://localhost:5000/results`
 
-## Need help?
+Optional override:
 
-### Troubleshooting
+```bash
+NEXT_PUBLIC_RESULTS_URL=https://your-api-domain/results npm run dev
+```
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+### Production build
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+```bash
+npm run build
+npm start
+```
+
+## Deploy frontend to Vercel
+
+1. Push this repository to GitHub.
+2. Import the repo into Vercel.
+3. Set the project root directory to `frontend`.
+4. (Optional) Add `NEXT_PUBLIC_RESULTS_URL` as an environment variable.
+5. Deploy.
+
+No code changes are required for Vercel deployment.
